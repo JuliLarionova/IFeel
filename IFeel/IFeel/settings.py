@@ -71,6 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'IFeel.wsgi.application'
 
+AUTH_USER_MODEL = 'IFeel.User'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
