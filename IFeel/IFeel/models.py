@@ -16,7 +16,7 @@ class QuestionaryField(models.Model):
 
 class Questionary(models.Model):
     name = models.CharField(max_length=255)
-    fields = models.ManyToManyField(QuestionaryField, related_name='questionaries', blank=True, null=True)
+    fields = models.ManyToManyField(QuestionaryField, related_name='questionaries', blank=True)
 
     def __str__(self):
         return '({}) {}'.format(self.id, self.name)
@@ -25,7 +25,7 @@ class Questionary(models.Model):
 class FieldValue(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     ctime = models.DateTimeField(auto_now_add=True)
-    mtime = models.DateTimeField(       auto_now=True)
+    mtime = models.DateTimeField(auto_now=True)
     questionary = models.ForeignKey(Questionary, on_delete=models.CASCADE)
     field = models.ForeignKey(QuestionaryField, on_delete=models.CASCADE)
     value = models.CharField(max_length=255)
