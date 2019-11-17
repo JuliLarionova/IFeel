@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -6,7 +7,7 @@ from IFeel.utils import SpechToText
 
 
 class MakeQuestionaryView(APIView):
-    def post(self, request, template_id,  *args, **kwargs):
+    def post(self, request, template_id, *args, **kwargs):
         template = models.Template.objects.get(id=template_id)
         questionary = models.Questionary(template=template, author=request.user)
         questionary.save()
@@ -15,7 +16,7 @@ class MakeQuestionaryView(APIView):
 
 
 class TemplatesView(APIView):
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         forms = models.Template.objects.all()
         return Response(list([x.to_json() for x in forms]))
 
@@ -33,6 +34,4 @@ class UpdateQuestionaryView(APIView):
         else:
             pass
 
-
-        return Response(status=)
-
+        return Response(status=status.HTTP_200_OK)
