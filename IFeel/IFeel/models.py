@@ -8,13 +8,14 @@ class User(AbstractUser):
 
 class QuestionaryField(models.Model):
     title = models.CharField(max_length=255)
-    parent_field = models.ForeignKey('self', null=True, blank=True, related_name='child_fields', on_delete=models.CASCADE)
+    parent_field = models.ForeignKey('self', null=True, blank=True, related_name='child_fields',
+                                     on_delete=models.CASCADE)
 
     def __str__(self):
         return '({}) {}'.format(self.id, self.title)
 
 
-class Questionary(models.Model):
+class Template(models.Model):
     name = models.CharField(max_length=255)
     fields = models.ManyToManyField(QuestionaryField, related_name='questionaries', blank=True)
 
@@ -22,8 +23,12 @@ class Questionary(models.Model):
         return '({}) {}'.format(self.id, self.name)
 
 
-class FieldValue(models.Model):
+class Questionary(models.Model):
+    template = models.ForeignKey(Template, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class FieldValue(models.Model):
     ctime = models.DateTimeField(auto_now_add=True)
     mtime = models.DateTimeField(auto_now=True)
     questionary = models.ForeignKey(Questionary, on_delete=models.CASCADE)
