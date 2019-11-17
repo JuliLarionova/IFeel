@@ -32,8 +32,8 @@ class UpdateQuestionaryView(APIView):
             stt = SpechToText()
             up_file_list = request.FILES.getlist('files')
             for file in up_file_list:
-                text = stt.get_text(file)
-                print(text)
+                text = stt.get_text(file).get('_text')
+                stt.parse_text(questionary,text)
         else:
             pass
 

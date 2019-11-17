@@ -1,6 +1,10 @@
+from cgitb import text
+
 from wit import Wit
 import magic
 import tempfile
+
+from IFeel import models
 
 
 class SpeechMimeException(Exception):
@@ -32,3 +36,21 @@ class SpechToText(object):
         with open(fn, 'rb') as f:
             resp = self.client.speech(f, None, {'Content-Type': mm})
         return resp
+
+
+    def parse_text(self, questionary, text):
+        questionary_fields = models.QuestionaryField.objects.all()
+        for field in questionary_fields:
+            print(text)
+            print(field.speech_code)
+            if field.speech_code.lower() in text:
+                field_id = models.QuestionaryField.objects.get(speech_code=field.speech_code.lower())
+                field_value = models.FieldValue.objects.get_or_create(field_id=field_id, questionary_id=questionary.id)
+                #field_value = models.FieldValue(value="", field_id=field.id, questionary_id=questionary.id)
+
+                if "значе" in text:
+                    startInd = text.find("значени") + 9
+                    str_len = len(text)
+                    field_value.value = text[startInd: startInd + (str_len-startInd)]
+
+                field_value.save()
