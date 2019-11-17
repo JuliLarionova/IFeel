@@ -18,12 +18,14 @@ class QuestionaryField(models.Model):
     title = models.CharField(max_length=255)
     parent_field = models.ForeignKey('self', null=True, blank=True, related_name='child_fields',
                                      on_delete=models.CASCADE)
+    speech_code = models.CharField(max_length=255, default="")
 
     def to_json(self):
         return {
             'id': self.id,
             'title': self.title,
-                'parent': (None if self.parent_field is None else self.parent_field.to_json())
+            'parent': (None if self.parent_field is None else self.parent_field.to_json()),
+            'speech_code': self.speech_code
         }
 
     def __str__(self):

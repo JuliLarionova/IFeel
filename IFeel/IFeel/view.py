@@ -24,13 +24,16 @@ class TemplatesView(APIView):
 class UpdateQuestionaryView(APIView):
     def post(self, request, questionary_id, *args, **kwargs):
         questionary = models.Questionary.objects.get(id=questionary_id)
-        if not request.user or questionary.author_id != request.user.id:
-            return Response(status=400)
+        questionary_fields = models.QuestionaryField.objects.all()
+        print(questionary_fields)
+        # if not request.user or questionary.author_id != request.user.id:
+        #   return Response(status=400)
         if request.FILES:
             stt = SpechToText()
             up_file_list = request.FILES.getlist('files')
             for file in up_file_list:
                 text = stt.get_text(file)
+                print(text)
         else:
             pass
 
