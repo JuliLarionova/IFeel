@@ -6,5 +6,5 @@ with open('/home/julia/Documents/test_audio.mp3', 'rb') as f:
 print('Inserting values of {}'.format(resp))
 
 def read_file(file):
-   
+
    resp = client.speech(f, None, {'Content-Type': 'audio/mpeg3'})
