@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from IFeel.view import AudioFileView, TemplatesView
+from IFeel.view import AudioFileView, TemplatesView, FilesView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('audio/', AudioFileView.as_view()),
     path('templates/', TemplatesView.as_view()),
+    path('files/', FilesView.as_view()),
 ]
