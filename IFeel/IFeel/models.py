@@ -23,7 +23,7 @@ class QuestionaryField(models.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'parent': (None if self.parent_field is None else self.parent_field.to_json())
+                'parent': (None if self.parent_field is None else self.parent_field.to_json())
         }
 
     def __str__(self):
@@ -33,6 +33,15 @@ class QuestionaryField(models.Model):
 class Template(models.Model):
     name = models.CharField(max_length=255)
     fields = models.ManyToManyField(QuestionaryField, related_name='questionaries', blank=True)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'fields': [
+                x.to_json() for x in self.fields.all()
+            ]
+        }
 
     def __str__(self):
         return '({}) {}'.format(self.id, self.name)
@@ -49,7 +58,7 @@ class Questionary(models.Model):
         return {
             'id': self.id,
             'author': self.author.to_json(),
-            'template_name': self.template.name,
+            'template': self.template.to_json(),
             'fields': [
                 {
                     'field': x.to_json(),

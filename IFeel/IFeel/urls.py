@@ -19,14 +19,12 @@ from django.urls import path, include
 from IFeel import view
 
 questionary_urls = [
-    path('create/<int:template_id>/', view.MakeQuestionary.as_view(), name='make_questionary'),
+    path('create/<int:template_id>/', view.MakeQuestionaryView.as_view(), name='make_questionary'),
+    path('update/<int:questionary_id>/', view.UpdateQuestionaryView.as_view(), name='update_questionary'),
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('audio/', AudioFileView.as_view()),
-    path('templates/', TemplatesView.as_view()),
-    path('files/', FilesView.as_view()),
     path('templates/', view.TemplatesView.as_view(), name="templates"),
     path('questionary/', include(questionary_urls)),
 ]

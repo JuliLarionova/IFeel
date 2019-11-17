@@ -1,14 +1,12 @@
-import os
-
-from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from IFeel import models
+from IFeel.utils import SpechToText
 
 
-class MakeQuestionary(APIView):
-    def post(self, request, template_id):
+class MakeQuestionaryView(APIView):
+    def post(self, request, template_id,  *args, **kwargs):
         template = models.Template.objects.get(id=template_id)
         questionary = models.Questionary(template=template, author=request.user)
         questionary.save()
@@ -17,20 +15,24 @@ class MakeQuestionary(APIView):
 
 
 class TemplatesView(APIView):
-    def get(self, request):
+    def get(self, request,  *args, **kwargs):
         forms = models.Template.objects.all()
-        return Response(list([{"name": x.name, "id": x.id} for x in forms]))
+        return Response(list([x.to_json() for x in forms]))
 
 
-class FileUploadSerializer(serializers.Serializer):
-    # I set use_url to False so I don't need to pass file
-    # through the url itself - defaults to True if you need it
-    file = serializers.FileField()
+class UpdateQuestionaryView(APIView):
+    def post(self, request, questionary_id, *args, **kwargs):
+        questionary = models.Questionary.objects.get(id=questionary_id)
+        if not request.user or questionary.author_id != request.user.id:
+            return Response(status=400)
+        if request.FILES:
+            stt = SpechToText()
+            up_file_list = request.FILES.getlist('files')
+            for file in up_file_list:
+                text = stt.get_text(file)
+        else:
+            pass
 
 
-class FilesView(APIView):
-
-    def post(self, request):
-        up_file_list = request.FILES.getlist('data')
-        for file in up_file_list:
+        return Response(status=)
 
